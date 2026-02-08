@@ -24,6 +24,20 @@ def add_user():
         return jsonify({'message':'email is already used'}),400
     users_instance.add(name,email)
     return jsonify({'message':'added successfully'}),201
+@app.route('/updateuser',methods=['POST'])
+def update_user():
+    view_list = users_instance.view_users()
+    data = request.get_json()
+    name = data['name']
+    email = data['email']
+    id = data['id']
+
+    if_match = next((v for v in view_list if v['id'] == id), None)
+
+    if not if_match:
+        return jsonify({'message':'id not match'}),400
+    users_instance.update(name,email,id)
+    return jsonify({'message':'update successfully'})
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port=5000)

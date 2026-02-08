@@ -43,7 +43,13 @@ class Usersdb():
         dbcursor.execute(querry,(name,email,))
         db.commit()
         dbcursor.close()
-
+    def update(self,name,email,id):
+        db.ping(reconnect=True)
+        dbcursor = db.cursor(dictionary=True)
+        querry = 'update users set name=%s,email=%s where id=%s'
+        dbcursor.execute(querry,(name,email,id,))
+        db.commit()
+        dbcursor.close()
 
 
 

@@ -50,7 +50,30 @@ class Usersdb():
         dbcursor.execute(querry,(name,email,id,))
         db.commit()
         dbcursor.close()
-
+    def delete(self,id):
+        db.ping(reconnect=True)
+        dbcursor = db.cursor(dictionary=True)
+        querry = 'delete from users where id = %s'
+        dbcursor.execute(querry,(id,))
+        db.commit()
+        dbcursor.close()
+class Action():
+    def match(self,id):
+        db.ping(reconnect=True)
+        dbcursor = db.cursor(dictionary=True)
+        querry = 'select * from users where id = %s'
+        dbcursor.execute(querry,(id,))
+        result =  dbcursor.fetchall()
+        dbcursor.close()
+        return result
+    def match_email(self,email):
+        db.ping(reconnect=True)
+        dbcursor = db.cursor(dictionary=True)
+        querry = 'select * from users where email = %s'
+        dbcursor.execute(querry,(email,))
+        result = dbcursor.fetchall()
+        dbcursor.close()
+        return result
 
 
 

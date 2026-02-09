@@ -1,9 +1,10 @@
 from flask  import Flask,jsonify,request
-from appdb import Users,Usersdb
+from appdb import Users,Usersdb,Action
 
 app = Flask(__name__)
 
 users_instance = Usersdb()
+user_match = Action()
 
 @app.route('/',methods=['GET'])
 def viewusers():
@@ -13,31 +14,40 @@ def viewusers():
     return view_list
 @app.route('/adduser',methods=['POST'])
 def add_user():
-    view_list = users_instance.view_users()
     data = request.get_json()
     name = data['name']
     email = data['email']
-
-    if_match = next((v for v in view_list if v['email'] == email),None)
+    if_match = user_match.match_email(email)
 
     if if_match:
         return jsonify({'message':'email is already used'}),400
     users_instance.add(name,email)
     return jsonify({'message':'added successfully'}),201
-@app.route('/updateuser',methods=['POST'])
+@app.route('/updateuser',methods=['PUT'])
 def update_user():
-    view_list = users_instance.view_users()
     data = request.get_json()
     name = data['name']
     email = data['email']
     id = data['id']
 
-    if_match = next((v for v in view_list if v['id'] == id), None)
+    find_user = user_match.match(id)
 
-    if not if_match:
-        return jsonify({'message':'id not match'}),400
-    users_instance.update(name,email,id)
-    return jsonify({'message':'update successfully'})
+    if find_user:
+        users_instance.update(name, email, id)
+        return jsonify({'message': 'update successfully'})
+
+    return jsonify({'message':'id not match'}),400
+@app.route('/deleteuser',methods=['DELETE'])
+def delete_user():
+    data = request.get_json()
+    id = data['id']
+    find_user = user_match.match(id)
+    # print(find_user)
+    if find_user:
+        users_instance.delete(id)
+        return jsonify({'message':'delete successfully'}),200
+
+    return jsonify({'message':'id not found'}),404
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port=5000)

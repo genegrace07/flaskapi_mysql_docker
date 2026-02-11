@@ -26,9 +26,12 @@ def add_user():
 @app.route('/updateuser',methods=['PUT'])
 def update_user():
     data = request.get_json()
-    name = data['name']
-    email = data['email']
-    id = data['id']
+    name = data.get('name')
+    email = data.get('email')
+    id = data.get('id')
+
+    if not id:
+        return jsonify({'message':'input an id to update'}),400
 
     find_user = user_match.match(id)
 
@@ -40,7 +43,11 @@ def update_user():
 @app.route('/deleteuser',methods=['DELETE'])
 def delete_user():
     data = request.get_json()
-    id = data['id']
+    id = data.get('id')
+
+    if not id:
+        return jsonify({'message':'input an id to delete'}),400
+
     find_user = user_match.match(id)
     # print(find_user)
     if find_user:

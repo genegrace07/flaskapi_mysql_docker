@@ -63,7 +63,7 @@ class Action():
         dbcursor = db.cursor(dictionary=True)
         querry = 'select * from users where id = %s'
         dbcursor.execute(querry,(id,))
-        result =  dbcursor.fetchall()
+        result =  dbcursor.fetchone()
         dbcursor.close()
         return result
     def match_email(self,email):

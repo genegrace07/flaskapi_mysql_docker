@@ -1,0 +1,23 @@
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: ${dbpassword}
+      MYSQL_DATABASE: ${dbdatabase}
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  api:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      dbhost: ${dbhost}
+      dbuser: ${dbuser}
+      dbpassword: ${dbpassword}
+      dbdatabase: ${dbdatabase}
+

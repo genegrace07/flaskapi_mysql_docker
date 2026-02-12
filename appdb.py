@@ -2,15 +2,29 @@ import mysql.connector
 from dotenv import load_dotenv
 import os
 from pydantic import BaseModel
+import time
 
 load_dotenv()
 
-db = mysql.connector.connect(
-    host=os.getenv('dbhost'),
-    user=os.getenv('dbuser'),
-    password=os.getenv('dbpassword'),
-    database=os.getenv('dbdatabase')
-)
+for t in range(10):
+    try:
+        db = mysql.connector.connect(
+            host=os.environ.get('dbhost'),
+            user=os.environ.get('dbuser'),
+            password=os.environ.get('dbpassword'),
+            database=os.environ.get('dbdatabase')
+        # db = mysql.connector.connect(
+        #     host=os.getenv('dbhost'),
+        #     user=os.getenv('dbuser'),
+        #     password=os.getenv('dbpassword'),
+        #     database=os.getenv('dbdatabase')
+        )
+        print('Connected successfully on mysql')
+        break
+    except mysql.connector.Error as e:
+        print('waiting to connect....',e)
+        time.sleep(4)
+
 
 # dbcursor=db.cursor(dictionary=True)
 ##flaskapi_mysql_docker table and columns

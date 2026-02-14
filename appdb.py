@@ -17,11 +17,11 @@ print("DB_PORT =", os.environ.get('DB_PORT'))
 for t in range(10):
     try:
         db = mysql.connector.connect(
-            host=os.environ.get('dbhost'),
-            user=os.environ.get('dbuser'),
+            host=os.environ.get('dbhost','shortline.proxy.rlwy.net'),
+            user=os.environ.get('dbuser','root'),
             password=os.environ.get('dbpassword'),
-            database=os.environ.get('dbdatabase'),
-            port=int(os.environ.get('DB_PORT', 3306))
+            database=os.environ.get('dbdatabase','railway'),
+            port=int(os.environ.get('DB_PORT', 12169))
         )
         print("✅ Connected successfully to MySQL")
         break

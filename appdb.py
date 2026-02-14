@@ -8,6 +8,12 @@ load_dotenv()
 
 db = None
 
+print("DB_HOST =", os.environ.get('dbhost'))
+print("DB_USER =", os.environ.get('dbuser'))
+print("DB_NAME =", os.environ.get('dbdatabase'))
+print("DB_PORT =", os.environ.get('DB_PORT'))
+
+# Try connecting to MySQL up to 10 times
 for t in range(10):
     try:
         db = mysql.connector.connect(
@@ -15,21 +21,38 @@ for t in range(10):
             user=os.environ.get('dbuser'),
             password=os.environ.get('dbpassword'),
             database=os.environ.get('dbdatabase'),
-            port=int(os.getenv("DB_PORT", 3306))
-        # db = mysql.connector.connect(
-        #     host=os.getenv('dbhost'),
-        #     user=os.getenv('dbuser'),
-        #     password=os.getenv('dbpassword'),
-        #     database=os.getenv('dbdatabase')
+            port=int(os.environ.get('DB_PORT', 3306))
         )
-        print('Connected successfully on mysql')
+        print("✅ Connected successfully to MySQL")
         break
     except mysql.connector.Error as e:
-        print('waiting to connect....',e)
+        print(f"⏳ Waiting to connect... Attempt {t+1}/10: {e}")
         time.sleep(4)
-
-if db is None:
+else:
     raise RuntimeError("❌ Could not connect to MySQL after multiple attempts")
+
+# for t in range(10):
+#     try:
+#         db = mysql.connector.connect(
+#             host=os.environ.get('dbhost'),
+#             user=os.environ.get('dbuser'),
+#             password=os.environ.get('dbpassword'),
+#             database=os.environ.get('dbdatabase'),
+#             port=int(os.getenv("DB_PORT", 3306))
+#         # db = mysql.connector.connect(
+#         #     host=os.getenv('dbhost'),
+#         #     user=os.getenv('dbuser'),
+#         #     password=os.getenv('dbpassword'),
+#         #     database=os.getenv('dbdatabase')
+#         )
+#         print('Connected successfully on mysql')
+#         break
+#     except mysql.connector.Error as e:
+#         print('waiting to connect....',e)
+#         time.sleep(4)
+#
+# if db is None:
+#     raise RuntimeError("❌ Could not connect to MySQL after multiple attempts")
 
 # dbcursor=db.cursor(dictionary=True)
 ##flaskapi_mysql_docker table and columns

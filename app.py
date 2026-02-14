@@ -57,6 +57,10 @@ def delete_user():
 
     return jsonify({'message':'id not found'}),404
 
+print("Available routes:")
+print(app.url_map)
+
+
 if __name__ == '__main__':
     port = int(os.environ.get("PORT",5000))
     app.run(debug=False,host='0.0.0.0',port=port)

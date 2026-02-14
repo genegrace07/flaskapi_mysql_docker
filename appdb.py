@@ -14,7 +14,8 @@ for t in range(10):
             host=os.environ.get('dbhost'),
             user=os.environ.get('dbuser'),
             password=os.environ.get('dbpassword'),
-            database=os.environ.get('dbdatabase')
+            database=os.environ.get('dbdatabase'),
+            port=int(os.getenv("DB_PORT", 3306))
         # db = mysql.connector.connect(
         #     host=os.getenv('dbhost'),
         #     user=os.getenv('dbuser'),

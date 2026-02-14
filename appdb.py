@@ -6,6 +6,8 @@ import time
 
 load_dotenv()
 
+db = None
+
 for t in range(10):
     try:
         db = mysql.connector.connect(
@@ -25,6 +27,8 @@ for t in range(10):
         print('waiting to connect....',e)
         time.sleep(4)
 
+if db is None:
+    raise RuntimeError("❌ Could not connect to MySQL after multiple attempts")
 
 # dbcursor=db.cursor(dictionary=True)
 ##flaskapi_mysql_docker table and columns
